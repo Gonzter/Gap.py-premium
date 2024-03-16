@@ -1,7 +1,8 @@
 import pygame
 from pygame.locals import *
-from character import Character
-from sprite import Sprite
+from include.character import Character
+from include.media import MediaPath
+from include.sprite import *
 
 class Game:
     def __init__(self):
@@ -15,10 +16,10 @@ class Game:
         self.character = Character(self.fenetre)
 
         self.sprites = pygame.sprite.Group()
-        self.add_sprite("door.png", (500, 500))
+        self.add_sprite(MediaPath.door, (500, 500))
 
         # Charger l'arrière-plan et le redimensionner
-        self.background = pygame.image.load("background.png").convert()
+        self.background = pygame.image.load(MediaPath.bg).convert()
         self.background = pygame.transform.scale(self.background, (self.largeur, self.hauteur))
 
     def add_sprite(self, image_path, position):
@@ -48,7 +49,3 @@ class Game:
             pygame.display.flip()
 
         pygame.quit()
-
-if __name__ == "__main__":
-    game = Game()
-    game.run()

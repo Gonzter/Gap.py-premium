@@ -1,14 +1,15 @@
 import pygame
+from include.media import MediaPath
 from pygame.locals import *
 
 class Character:
     def __init__(self, fenetre):
         self.fenetre = fenetre
-        self.original_image = pygame.image.load("seb.png").convert_alpha()
+        self.original_image = pygame.image.load(MediaPath.seb).convert_alpha()
         self.image = self.original_image
         self.rect = self.image.get_rect()
 
-        
+
         self.image_scale_factor = 0.7
         self.image = pygame.transform.scale(self.image, (int(self.rect.width * self.image_scale_factor), int(self.rect.height * self.image_scale_factor)))
         self.rect = self.image.get_rect(center=self.rect.center)
