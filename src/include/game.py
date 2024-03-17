@@ -66,26 +66,35 @@ class Game:
         pygame.quit()
 
     def run(self):
+        self.camera_x = 0
         self.background = pygame.image.load(ImgPath.bg).convert()
         self.background = pygame.transform.scale(self.background, (self.width, self.height))
-        in_progress = True
+        self.background_width = self.background.get_width()
+        display = True
         Music.runMusic(AudioPath.main_music)
-        while in_progress:
+        while 42:
             for event in pygame.event.get():
                 if event.type == QUIT:
-                    in_progress = False
+                    display = False
                 elif event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
-                        in_progress = False
+                        display = False
+            if (display == False):
+                break
+            keys = pygame.key.get_pressed()
+            # move map
+            if keys[K_LEFT] or keys[K_q]:
+                self.camera_x += self.character.vitesse_x
+            elif keys[K_RIGHT] or keys[K_d]:
+                self.camera_x -= self.character.vitesse_x
+            # display background
+            self.window.blit(self.background, (self.camera_x % self.background_width - self.background_width, 0))
+            self.window.blit(self.background, (self.camera_x % self.background_width, 0))
+            self.window.blit(self.background, (self.camera_x % self.background_width + self.background_width, 0))
 
-            self.character.update(pygame.key.get_pressed())
-
-            # Afficher l'arrière-plan
-            self.window.blit(self.background, (0, 0))
-
-            # Dessiner les autres éléments du jeu
+            # Mise à jour du personnage
+            self.character.update(keys)
             self.character.draw()
-            self.sprites.draw(self.window)
 
             pygame.display.flip()
 
