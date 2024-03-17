@@ -11,6 +11,7 @@ class ImgPath :
     menu = "assets/images/menu.png"
 
 class AudioPath :
+    collide = "assets/music/slime_jump.wav"
     main_music = "assets/music/rpg_title.ogg"
     main_title = "assets/music/Scarlet_Forest_TubeRipper.cc.ogg"
     jump = "assets/music/cartoon_jump.ogg"

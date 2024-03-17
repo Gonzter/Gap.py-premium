@@ -5,6 +5,28 @@ class Ennemy:
     def __init__(self):
         print("Nothing to see here")
 
+class Door(Ennemy):
+    def __init__(self, x, y):
+        self.sprite = pygame.image.load(ImgPath.door)
+        self.size_x = 278
+        self.size_y = 187
+        self.speed = 0
+        self.rect = pygame.Rect(x, y, self.size, self.size)
+        # self.cur_sprite =  pygame.transform.scale(self.cur_sprite, (self.size, self.size))
+
+    def move(self, screen_move):
+        self.rect.x += screen_move
+
+    def update(self, direction:int, tile_value = 0):
+        self.direction = direction
+        self.cur_sprite = self.tiles["side"][tile_value]
+        if (direction < 0):
+            self.cur_sprite = pygame.transform.flip(self.cur_sprite, True, False)
+        self.cur_sprite =  pygame.transform.scale(self.cur_sprite, (self.size, self.size))
+
+    def draw(self, window):
+        window.blit(self.cur_sprite, self.rect)
+
 class Slime(Ennemy):
     def __init__(self, x, y):
         sprite_sheet = pygame.image.load(ImgPath.slime)

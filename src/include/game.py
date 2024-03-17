@@ -2,7 +2,7 @@ import pygame
 import random
 from pygame.locals import *
 from include.sprite import *
-from include.ennemies import Slime
+from include.ennemies import Slime, Door
 from include.character import Character
 from include.media import AudioPath, Fonts, ImgPath, Music
 
@@ -58,8 +58,8 @@ class Game:
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = pygame.mouse.get_pos()
                     if play_button.collidepoint(mouse_pos):
-                        self.run()
-                        display = False
+                        if self.run() == 0:
+                            return -1
                     elif settings_button_rect.collidepoint(mouse_pos):
                         print("Settings button clicked")
                     elif quit_button_rect.collidepoint(mouse_pos):
@@ -67,8 +67,9 @@ class Game:
             if (display):
                 pygame.display.flip()
         pygame.quit()
+        return 0
 
-    def __spawner__(self, ennemies):
+    def __spawner__(self, ennemies, door, direction):
         rand = random.randint(0, 100)
         if rand < 95:
             if (random.randint(0, 1)):
@@ -76,7 +77,11 @@ class Game:
             else:
                 ennemies.append(Slime(2000, 675))
             return
-        if rand < 98:
+        else:
+            if (direction > 0):
+                door.append(Door(-50, 675))
+            else:
+                door.append(Door(2000, 675))
             print("spawn door")
 
     def update_tile_value(self, tile_value):
@@ -91,9 +96,11 @@ class Game:
         self.background = pygame.transform.scale(self.background, (self.width, self.height))
         self.background_width = self.background.get_width()
         display = True
+        collide_sound = Music.createSound(AudioPath.collide)
         Music.runMusic(AudioPath.main_music)
         ennemies = []
         ennemies.append(Slime(50, 675))
+        door = []
         time_millisec = 0
         tile_value = 0
         ennemy_speed_modificator = 0
@@ -111,9 +118,13 @@ class Game:
                 tile_value = self.update_tile_value(tile_value)
             if keys[K_LEFT] or keys[K_q]:
                 self.camera_x += self.character.vitesse_x
+                if len(door) > 0:
+                    door[0].move(self.character.vitesse_x)
                 ennemy_speed_modificator = -self.character.vitesse_x
             elif keys[K_RIGHT] or keys[K_d]:
                 self.camera_x -= self.character.vitesse_x
+                if len(door) > 0:
+                    door[0].move(-self.character.vitesse_x)
                 ennemy_speed_modificator = self.character.vitesse_x
             else:
                 ennemy_speed_modificator = 0
@@ -126,7 +137,7 @@ class Game:
             self.window.blit(self.background, (self.camera_x % self.background_width, 0))
             self.window.blit(self.background, (self.camera_x % self.background_width + self.background_width, 0))
             if (pygame.time.get_ticks() > time_millisec + 5000):
-                self.__spawner__(ennemies)
+                self.__spawner__(ennemies, door, ennemy_speed_modificator)
                 time_millisec = pygame.time.get_ticks()
             # mise à jour des ennemis
             for ennemy in ennemies:
@@ -135,12 +146,12 @@ class Game:
                 else:
                     ennemy.update(-1, tile_value)
                 if self.character.rect.colliderect(ennemy.rect):
+                    Music.runSound(collide_sound)
                     print("collide")
+                    return -1
                 ennemy.draw(self.window)
             # Mise à jour du personnage
             self.character.update(keys)
             self.character.draw()
-
             pygame.display.flip()
-
         pygame.quit()
