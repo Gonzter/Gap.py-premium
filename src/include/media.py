@@ -3,11 +3,14 @@ import pygame
 class ImgPath :
     bg = "assets/images/background.png"
     door = "assets/images/door.png"
+    old_man = "assets/images/old_man.png"
     seb = "assets/images/seb.png"
+    slime = "assets/images/slime_spritesheet.png"
     menu = "assets/images/menu.png"
 
 class AudioPath :
     main_music = "assets/music/rpg_title.ogg"
+    main_title = "assets/music/Scarlet_Forest_TubeRipper.cc.ogg"
     jump = "assets/music/cartoon_jump.ogg"
 
 class Music:

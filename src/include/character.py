@@ -23,6 +23,7 @@ class Character:
         if (keys[K_UP] or keys[K_SPACE]) and not self.isJumping:
             self.jump()
         self.jump_handler()
+        self.draw()
 
     def jump_handler(self):
         if self.isJumping:
