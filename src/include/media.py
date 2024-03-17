@@ -2,7 +2,9 @@ import pygame
 
 class ImgPath :
     bg = "assets/images/background.png"
+    butonFrame = "assets/images/butonFrame.png"
     door = "assets/images/door.png"
+    gappy = "assets/images/Gappy.jpg"
     old_man = "assets/images/old_man.png"
     seb = "assets/images/seb.png"
     slime = "assets/images/slime_spritesheet.png"
@@ -12,6 +14,9 @@ class AudioPath :
     main_music = "assets/music/rpg_title.ogg"
     main_title = "assets/music/Scarlet_Forest_TubeRipper.cc.ogg"
     jump = "assets/music/cartoon_jump.ogg"
+
+class Fonts :
+    default = "assets/font.ttf"
 
 class Music:
     def runMusic(playlist, volume:float=1.0):
