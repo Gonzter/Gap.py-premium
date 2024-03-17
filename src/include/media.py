@@ -4,6 +4,7 @@ class ImgPath :
     bg = "assets/images/background.png"
     door = "assets/images/door.png"
     seb = "assets/images/seb.png"
+    menu = "assets/images/menu.png"
 
 class AudioPath :
     main_music = "assets/music/rpg_title.ogg"
