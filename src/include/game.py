@@ -1,4 +1,5 @@
 import pygame
+import random
 from pygame.locals import *
 from include.sprite import *
 from include.ennemies import Slime
@@ -67,6 +68,23 @@ class Game:
                 pygame.display.flip()
         pygame.quit()
 
+    def __spawner__(self, ennemies):
+        rand = random.randint(0, 100)
+        if rand < 95:
+            if (random.randint(0, 1)):
+                ennemies.append(Slime(-50, 675))
+            else:
+                ennemies.append(Slime(2000, 675))
+            return
+        if rand < 98:
+            print("spawn door")
+
+    def update_tile_value(self, tile_value):
+        tile_value += 1
+        if (tile_value > 2):
+            return 0
+        return tile_value
+
     def run(self):
         self.camera_x = 0
         self.background = pygame.image.load(ImgPath.bg).convert()
@@ -74,7 +92,11 @@ class Game:
         self.background_width = self.background.get_width()
         display = True
         Music.runMusic(AudioPath.main_music)
-        slime = Slime(50, 675, 0)
+        ennemies = []
+        ennemies.append(Slime(50, 675))
+        time_millisec = 0
+        tile_value = 0
+        ennemy_speed_modificator = 0
         while 42:
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -85,21 +107,39 @@ class Game:
                 break
             keys = pygame.key.get_pressed()
             # move map
+            if (pygame.time.get_ticks() % 70 == 0):
+                tile_value = self.update_tile_value(tile_value)
             if keys[K_LEFT] or keys[K_q]:
                 self.camera_x += self.character.vitesse_x
-                slime.update(-1, 0)
+                ennemy_speed_modificator = -self.character.vitesse_x
             elif keys[K_RIGHT] or keys[K_d]:
                 self.camera_x -= self.character.vitesse_x
-                slime.update(1, 0)
+                ennemy_speed_modificator = self.character.vitesse_x
+            else:
+                ennemy_speed_modificator = 0
+            if (pygame.time.get_ticks() % 20 == 0):
+                ennemy_speed_modificator = ennemy_speed_modificator
+                for ennemy in ennemies:
+                    ennemy.move(ennemy_speed_modificator)
             # display background
             self.window.blit(self.background, (self.camera_x % self.background_width - self.background_width, 0))
             self.window.blit(self.background, (self.camera_x % self.background_width, 0))
             self.window.blit(self.background, (self.camera_x % self.background_width + self.background_width, 0))
-
+            if (pygame.time.get_ticks() > time_millisec + 5000):
+                self.__spawner__(ennemies)
+                time_millisec = pygame.time.get_ticks()
+            # mise à jour des ennemis
+            for ennemy in ennemies:
+                if self.character.rect.x > ennemy.rect.x:
+                    ennemy.update(1, tile_value)
+                else:
+                    ennemy.update(-1, tile_value)
+                if self.character.rect.colliderect(ennemy.rect):
+                    print("collide")
+                ennemy.draw(self.window)
             # Mise à jour du personnage
             self.character.update(keys)
             self.character.draw()
-            slime.draw(self.window)
 
             pygame.display.flip()
 
