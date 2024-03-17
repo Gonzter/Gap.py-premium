@@ -34,26 +34,24 @@ class Game:
         return new_button
 
     def main_menu(self):
+        # create and display background
         self.background = pygame.image.load(ImgPath.menu).convert()
         self.background = pygame.transform.scale(self.background, (self.width, self.height))
         self.window.blit(self.background, (0, 0))
-        # work here
+        #create buttons
         button_size = Coord(200,50)
         play_button = self.new_button("Play", button_size, 500)
         settings_button_rect = self.new_button("Settings", button_size, 600)
         quit_button_rect = self.new_button("Quit", button_size, 700)
-        # end
+        #display loop
         display = True
-        close_game =  False
         while (display):
             for event in pygame.event.get():
                 if event.type == QUIT:
                     display = False
-                    close_game = True
                 elif event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
                         display = False
-                        close_game = True
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = pygame.mouse.get_pos()
                     if play_button.collidepoint(mouse_pos):
@@ -65,8 +63,7 @@ class Game:
                         display = False
             if (display):
                 pygame.display.flip()
-        if (close_game):
-            pygame.quit()
+        pygame.quit()
 
     def run(self):
         self.background = pygame.image.load(ImgPath.bg).convert()
