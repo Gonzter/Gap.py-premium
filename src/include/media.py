@@ -10,7 +10,7 @@ class AudioPath :
     jump = "assets/music/cartoon_jump.ogg"
 
 class Music:
-    def runMusic(playlist):
+    def runMusic(playlist, volume:float=1.0):
         if (isinstance(playlist, str)):
             pygame.mixer.music.load(playlist)
             pygame.mixer.music.play(loops=-1)
@@ -18,9 +18,11 @@ class Music:
             for item in playlist:
                 pygame.music.mixer.queue(item)
 
-    def createSound(path:str):
+    def createSound(path:str, volume:float=1.0):
         try:
-            return pygame.mixer.Sound(path)
+            newSound = pygame.mixer.Sound(path)
+            newSound.set_volume(volume)
+            return newSound
         except Exception as error:
             print(error)
 
