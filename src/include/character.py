@@ -1,11 +1,11 @@
 import pygame
-from include.media import MediaPath
+from include.media import AudioPath, ImgPath, Music
 from pygame.locals import *
 
 class Character:
     def __init__(self, fenetre):
         self.fenetre = fenetre
-        self.original_image = pygame.image.load(MediaPath.seb).convert_alpha()
+        self.original_image = pygame.image.load(ImgPath.seb).convert_alpha()
         self.image = self.original_image
         self.rect = self.image.get_rect()
 
@@ -17,6 +17,7 @@ class Character:
         self.rect.center = (1000, 688)
         self.vitesse_x = 2
         self.saut_en_cours = False
+        self.jumpSound = Music.createSound(AudioPath.jump)
         self.gravite = 0.08
 
     def update(self, keys):
@@ -38,6 +39,7 @@ class Character:
             self.sauter()
 
     def sauter(self):
+        Music.runSound(self.jumpSound)
         self.saut_en_cours = True
         self.vitesse_y = 8
 

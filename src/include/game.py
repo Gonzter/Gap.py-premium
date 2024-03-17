@@ -1,8 +1,8 @@
 import pygame
 from pygame.locals import *
-from include.character import Character
-from include.media import MediaPath
 from include.sprite import *
+from include.character import Character
+from include.media import AudioPath, ImgPath, Music
 
 class Game:
     def __init__(self):
@@ -16,10 +16,10 @@ class Game:
         self.character = Character(self.fenetre)
 
         self.sprites = pygame.sprite.Group()
-        self.add_sprite(MediaPath.door, (500, 500))
+        self.add_sprite(ImgPath.door, (500, 500))
 
         # Charger l'arrière-plan et le redimensionner
-        self.background = pygame.image.load(MediaPath.bg).convert()
+        self.background = pygame.image.load(ImgPath.bg).convert()
         self.background = pygame.transform.scale(self.background, (self.largeur, self.hauteur))
 
     def add_sprite(self, image_path, position):
@@ -28,6 +28,7 @@ class Game:
 
     def run(self):
         en_cours = True
+        Music.runMusic(AudioPath.main_music)
         while en_cours:
             for event in pygame.event.get():
                 if event.type == QUIT:
